@@ -7,7 +7,7 @@ import (
 	real_debrid "github.com/sushydev/real_debrid_go"
 )
 
-type File struct {
+type TorrentFile struct {
 	ID       int    `json:"id"`
 	Path     string `json:"path"`
 	Bytes    int    `json:"bytes"`
@@ -15,22 +15,22 @@ type File struct {
 }
 
 type TorrentInfo struct {
-	ID               string   `json:"id"`
-	Filename         string   `json:"filename"`
-	OriginalFilename string   `json:"original_filename"`
-	Hash             string   `json:"hash"`
-	Bytes            int      `json:"bytes"`
-	OriginalBytes    int      `json:"original_bytes"`
-	Host             string   `json:"host"`
-	Split            int      `json:"split"`
-	Progress         int      `json:"progress"`
-	Status           string   `json:"status"`
-	Added            string   `json:"added"`
-	Files            []File   `json:"files"`
-	Links            []string `json:"links"`
-	Ended            string   `json:"ended,omitempty"`
-	Speed            int      `json:"speed,omitempty"`
-	Seeders          int      `json:"seeders,omitempty"`
+	ID               string        `json:"id"`
+	Filename         string        `json:"filename"`
+	OriginalFilename string        `json:"original_filename"`
+	Hash             string        `json:"hash"`
+	Bytes            int           `json:"bytes"`
+	OriginalBytes    int           `json:"original_bytes"`
+	Host             string        `json:"host"`
+	Split            int           `json:"split"`
+	Progress         int           `json:"progress"`
+	Status           string        `json:"status"`
+	Added            string        `json:"added"`
+	Files            []TorrentFile `json:"files"`
+	Links            []string      `json:"links"`
+	Ended            string        `json:"ended,omitempty"`
+	Speed            int           `json:"speed,omitempty"`
+	Seeders          int           `json:"seeders,omitempty"`
 }
 
 func GetTorrentInfo(client *real_debrid.Client, id string) (*TorrentInfo, error) {
