@@ -23,7 +23,7 @@ type TorrentInfo struct {
 	OriginalBytes    int           `json:"original_bytes"`
 	Host             string        `json:"host"`
 	Split            int           `json:"split"`
-	Progress         int           `json:"progress"`
+	Progress         float64       `json:"progress"`
 	Status           string        `json:"status"`
 	Added            string        `json:"added"`
 	Files            []TorrentFile `json:"files"`
