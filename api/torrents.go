@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	real_debrid "github.com/sushydev/real_debrid_go"
 )
@@ -35,12 +36,12 @@ func GetTorrentByHash(torrents Torrents, hash string) *Torrent {
 	return nil
 }
 
-func GetTorrents(client *real_debrid.Client) (*Torrents, error) {
+func GetTorrents(client *real_debrid.Client, limit uint, page uint) (*Torrents, error) {
 	url := client.GetURL("/torrents")
 
 	query := url.Query()
-	query.Add("limit", "1000")
-	query.Add("page", "1")
+	query.Add("limit", strconv.Itoa(int(limit)))
+	query.Add("page", strconv.Itoa(int(page)))
 
 	url.RawQuery = query.Encode()
 
