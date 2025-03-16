@@ -23,7 +23,7 @@ type UnrestrictLinkResponse struct {
 }
 
 func UnrestrictLink(client *real_debrid.Client, link string) (*UnrestrictLinkResponse, error) {
-	url := client.GetURL("/unrestrict/link")
+	url := client.GetUrl("/unrestrict/link")
 
 	form := urlpkg.Values{}
 	form.Add("link", link)

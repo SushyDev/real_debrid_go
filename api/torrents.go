@@ -37,7 +37,7 @@ func GetTorrentByHash(torrents Torrents, hash string) *Torrent {
 }
 
 func GetTorrents(client *real_debrid.Client, limit uint, page uint) (*Torrents, error) {
-	url := client.GetURL("/torrents")
+	url := client.GetUrl("/torrents")
 
 	query := url.Query()
 	query.Add("limit", strconv.Itoa(int(limit)))

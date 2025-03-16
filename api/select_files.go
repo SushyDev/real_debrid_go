@@ -15,7 +15,7 @@ func SelectFiles(client *real_debrid.Client, torrentId string, fileIds string) e
 	requestBody := input.Encode()
 	reader := bytes.NewBufferString(requestBody)
 
-	url := client.GetURL("/torrents/selectFiles/" + torrentId)
+	url := client.GetUrl("/torrents/selectFiles/" + torrentId)
 
 	req, err := http.NewRequest("POST", url.String(), reader)
 	if err != nil {

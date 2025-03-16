@@ -14,7 +14,7 @@ type addTorrentResponse struct {
 }
 
 func AddTorrent(client *real_debrid.Client, torrent io.Reader) (*addTorrentResponse, error) {
-	url := client.GetURL("/torrents/addTorrent")
+	url := client.GetUrl("/torrents/addTorrent")
 
 	req, err := http.NewRequest("PUT", url.String(), torrent)
 	if err != nil {

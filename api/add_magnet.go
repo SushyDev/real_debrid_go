@@ -19,7 +19,7 @@ func AddMagnet(client *real_debrid.Client, magnet string) (*addMagnetResponse, e
 	requestBody := input.Encode()
 	reader := bytes.NewBufferString(requestBody)
 
-	url := client.GetURL("/torrents/addMagnet")
+	url := client.GetUrl("/torrents/addMagnet")
 
 	req, err := http.NewRequest("POST", url.String(), reader)
 	if err != nil {

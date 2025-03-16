@@ -14,9 +14,13 @@ type Client struct {
 	path string
 }
 
-func NewClient(token string) *Client {
+func NewClient(token string, client *http.Client) *Client {
+	if client == nil {
+		client = &http.Client{}
+	}
+
 	return &Client{
-		Client: http.Client{},
+		Client: *client,
 		token:  token,
 
 		host: "https://api.real-debrid.com",
@@ -32,7 +36,7 @@ func (client *Client) Do(req *http.Request) (*http.Response, error) {
 
 // --- Helpers
 
-func (client *Client) GetURL(endpoint string) *urlpkg.URL {
+func (client *Client) GetUrl(endpoint string) *urlpkg.URL {
 	url, _ := urlpkg.Parse(client.host)
 	url.Path += client.path + endpoint
 

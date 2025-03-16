@@ -7,7 +7,7 @@ import (
 )
 
 func Delete(client *real_debrid.Client, id string) error {
-	url := client.GetURL("/torrents/delete/" + id)
+	url := client.GetUrl("/torrents/delete/" + id)
 
 	req, err := http.NewRequest("DELETE", url.String(), nil)
 	if err != nil {

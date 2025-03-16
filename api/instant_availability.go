@@ -18,7 +18,7 @@ type InstantAvailability struct {
 }
 
 func GetInstantAvailability(client *real_debrid.Client, hash string) (*InstantAvailability, error) {
-	url := client.GetURL("/torrents/instantAvailability/" + hash)
+	url := client.GetUrl("/torrents/instantAvailability/" + hash)
 
 	req, err := http.NewRequest("GET", url.String(), nil)
 	if err != nil {

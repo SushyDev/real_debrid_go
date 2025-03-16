@@ -34,7 +34,7 @@ type TorrentInfo struct {
 }
 
 func GetTorrentInfo(client *real_debrid.Client, id string) (*TorrentInfo, error) {
-	url := client.GetURL("/torrents/info/" + id)
+	url := client.GetUrl("/torrents/info/" + id)
 
 	req, err := http.NewRequest("GET", url.String(), nil)
 	if err != nil {
