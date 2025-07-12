@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"encoding/json"
 	"net/http"
 	"strconv"
@@ -24,9 +25,7 @@ type Torrent struct {
 	Seeders  int      `json:"seeders"`
 }
 
-type Torrents []*Torrent
-
-func GetTorrentByHash(torrents Torrents, hash string) *Torrent {
+func GetTorrentByHash(torrents []*Torrent, hash string) *Torrent {
 	for _, torrent := range torrents {
 		if torrent.Hash == hash {
 			return torrent
@@ -36,7 +35,7 @@ func GetTorrentByHash(torrents Torrents, hash string) *Torrent {
 	return nil
 }
 
-func GetTorrents(client *real_debrid.Client, limit uint, page uint) (*Torrents, error) {
+func GetTorrents(client *real_debrid.Client, limit uint, page uint) ([]*Torrent, int, error) {
 	url := client.GetUrl("/torrents")
 
 	query := url.Query()
@@ -47,25 +46,36 @@ func GetTorrents(client *real_debrid.Client, limit uint, page uint) (*Torrents, 
 
 	req, err := http.NewRequest("GET", url.String(), nil)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	response, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	defer response.Body.Close()
 
 	err = client.HandleResponseCode(response, 200)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
-	var torrents = &Torrents{}
-	if err := json.NewDecoder(response.Body).Decode(torrents); err != nil {
-		return nil, err
+	var torrents = []*Torrent{}
+	if err := json.NewDecoder(response.Body).Decode(&torrents); err != nil {
+		return nil, 0, err
 	}
 
-	return torrents, nil
+	totalCountHeader := response.Header.Get("X-Total-Count")
+	if totalCountHeader == "" {
+		return nil, 0, fmt.Errorf("X-Total-Count header not found in response")
+	}
+
+	totalCount, err := strconv.Atoi(totalCountHeader)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return torrents, totalCount, nil
 }
+
