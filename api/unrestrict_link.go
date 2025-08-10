@@ -13,7 +13,7 @@ type UnrestrictLinkResponse struct {
 	ID         string `json:"id"`
 	Filename   string `json:"filename"`
 	MimeType   string `json:"mimeType"`
-	FileSize   int64  `json:"fileSize"`
+	FileSize   int64  `json:"filesize"`
 	Link       string `json:"link"`
 	Host       string `json:"host"`
 	Chunks     int    `json:"chunks"`
@@ -34,6 +34,8 @@ func UnrestrictLink(client *real_debrid.Client, link string) (*UnrestrictLinkRes
 	if err != nil {
 		return nil, err
 	}
+	// Ensure form content type for proper parsing server-side
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	response, err := client.Do(req)
 	if err != nil {

@@ -1,8 +1,8 @@
 package api
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -16,7 +16,7 @@ type Torrent struct {
 	Bytes    int      `json:"bytes"`
 	Host     string   `json:"host"`
 	Split    int      `json:"split"`
-	Progress float64  `json:"progress"`
+	Progress int      `json:"progress"`
 	Status   string   `json:"status"`
 	Added    string   `json:"added"`
 	Links    []string `json:"links"`
@@ -78,4 +78,3 @@ func GetTorrents(client *real_debrid.Client, limit uint, page uint) ([]*Torrent,
 
 	return torrents, totalCount, nil
 }
-
