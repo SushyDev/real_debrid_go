@@ -21,6 +21,16 @@ type AvailableHost struct {
 	MaxFileSize int    `json:"max_file_size"`
 }
 
+func GetTorrentByHash(torrents []*Torrent, hash string) *Torrent {
+	for _, torrent := range torrents {
+		if torrent.Hash == hash {
+			return torrent
+		}
+	}
+
+	return nil
+}
+
 func GetActiveCount(client *real_debrid.Client) (*ActiveCount, error) {
 	url := client.GetUrl("/torrents/activeCount")
 	req, err := http.NewRequest("GET", url.String(), nil)
