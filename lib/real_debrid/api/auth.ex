@@ -19,10 +19,6 @@ defmodule RealDebrid.Api.Auth do
       {:ok, _body, _headers} ->
         :ok
 
-      {:error, "No content"} ->
-        # 204 is expected
-        :ok
-
       {:error, reason} ->
         {:error, reason}
     end

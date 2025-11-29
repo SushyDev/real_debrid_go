@@ -27,9 +27,6 @@ defmodule RealDebrid.Api.SelectFiles do
       {:ok, _body} ->
         :ok
 
-      {:error, "No content"} ->
-        :ok
-
       {:error, reason} ->
         {:error, reason}
     end

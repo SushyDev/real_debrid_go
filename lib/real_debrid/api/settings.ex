@@ -71,7 +71,6 @@ defmodule RealDebrid.Api.Settings do
 
     case Client.post(client, "/settings/update", form: form, expected_status: 204) do
       {:ok, _body} -> :ok
-      {:error, "No content"} -> :ok
       {:error, reason} -> {:error, reason}
     end
   end
@@ -88,7 +87,6 @@ defmodule RealDebrid.Api.Settings do
   def convert_points(%Client{} = client) do
     case Client.post(client, "/settings/convertPoints", expected_status: 204) do
       {:ok, _body} -> :ok
-      {:error, "No content"} -> :ok
       {:error, reason} -> {:error, reason}
     end
   end
@@ -105,7 +103,6 @@ defmodule RealDebrid.Api.Settings do
   def change_password(%Client{} = client) do
     case Client.post(client, "/settings/changePassword", expected_status: 204) do
       {:ok, _body} -> :ok
-      {:error, "No content"} -> :ok
       {:error, reason} -> {:error, reason}
     end
   end

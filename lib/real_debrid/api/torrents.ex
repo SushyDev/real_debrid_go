@@ -5,6 +5,8 @@ defmodule RealDebrid.Api.Torrents do
 
   alias RealDebrid.Client
 
+  @max_limit 1000
+
   @type torrent :: %{
           id: String.t(),
           filename: String.t(),
@@ -47,8 +49,8 @@ defmodule RealDebrid.Api.Torrents do
     limit = Keyword.get(opts, :limit, 100)
     page = Keyword.get(opts, :page, 1)
 
-    if limit < 1 or limit > 1000 do
-      {:error, "limit must be between 1 and 1000, got #{limit}"}
+    if limit < 1 or limit > @max_limit do
+      {:error, "limit must be between 1 and #{@max_limit}, got #{limit}"}
     else
       params = %{limit: limit, page: page}
 
@@ -88,9 +90,9 @@ defmodule RealDebrid.Api.Torrents do
   """
   @spec get_all(Client.t()) :: {:ok, [torrent()]} | {:error, term()}
   def get_all(%Client{} = client) do
-    case get(client, limit: 1000, page: 1) do
+    case get(client, limit: @max_limit, page: 1) do
       {:ok, %{torrents: torrents, total_count: total_count}} ->
-        total_pages = div(total_count + 999, 1000)
+        total_pages = ceil(total_count / @max_limit)
         fetch_all_pages(client, torrents, 2, total_pages)
 
       {:error, reason} ->
@@ -121,7 +123,7 @@ defmodule RealDebrid.Api.Torrents do
   end
 
   defp fetch_all_pages(client, torrents, page, total_pages) do
-    case get(client, limit: 1000, page: page) do
+    case get(client, limit: @max_limit, page: page) do
       {:ok, %{torrents: new_torrents}} ->
         fetch_all_pages(client, torrents ++ new_torrents, page + 1, total_pages)
 

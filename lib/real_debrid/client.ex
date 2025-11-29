@@ -86,7 +86,7 @@ defmodule RealDebrid.Client do
   @doc """
   Makes a POST request to the API with form data.
   """
-  @spec post(t(), String.t(), keyword()) :: {:ok, map() | list()} | {:error, term()}
+  @spec post(t(), String.t(), keyword()) :: {:ok, map() | list() | nil} | {:error, term()}
   def post(%__MODULE__{req: req}, endpoint, opts \\ []) do
     form = Keyword.get(opts, :form, %{})
     expected_status = Keyword.get(opts, :expected_status, 200)
@@ -96,7 +96,7 @@ defmodule RealDebrid.Client do
         status = response.status
         body = response.body
 
-        if status == expected_status do
+        if status == expected_status or (expected_status == 204 and status == 204) do
           {:ok, body}
         else
           {:error, handle_status_code(status)}
@@ -154,7 +154,6 @@ defmodule RealDebrid.Client do
   @spec handle_status_code(integer()) :: String.t()
   def handle_status_code(status) do
     case status do
-      204 -> "No content"
       400 -> "Bad Request (see error message)"
       401 -> "Bad token (expired, invalid)"
       403 -> "Permission denied (account locked, not premium) or Infringing torrent"
