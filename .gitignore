@@ -24,3 +24,6 @@ real_debrid-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+# Compiled bytecode files
+*.beam
