@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"io"
+	"mime/multipart"
 	"net/http"
 
 	real_debrid "github.com/sushydev/real_debrid_go"
@@ -16,12 +17,31 @@ type addTorrentResponse struct {
 func AddTorrent(client *real_debrid.Client, torrent io.Reader) (*addTorrentResponse, error) {
 	url := client.GetUrl("/torrents/addTorrent")
 
-	req, err := http.NewRequest("PUT", url.String(), torrent)
+	// Build multipart form-data with field name "file"
+	pr, pw := io.Pipe()
+	writer := multipart.NewWriter(pw)
+
+	go func() {
+		defer pw.Close()
+		defer writer.Close()
+
+		part, err := writer.CreateFormFile("file", "upload.torrent")
+		if err != nil {
+			pw.CloseWithError(err)
+			return
+		}
+		if _, err := io.Copy(part, torrent); err != nil {
+			pw.CloseWithError(err)
+			return
+		}
+	}()
+
+	req, err := http.NewRequest("PUT", url.String(), pr)
 	if err != nil {
 		return nil, err
 	}
 
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Content-Type", writer.FormDataContentType())
 
 	response, err := client.Do(req)
 	if err != nil {
